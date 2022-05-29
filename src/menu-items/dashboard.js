@@ -1,8 +1,8 @@
 // assets
-import { IconDashboard, IconHome } from '@tabler/icons';
+import { HospitalIcon } from 'assets/images/icons/index';
 
 // constant
-const icons = { IconDashboard, IconHome };
+const icons = { HospitalIcon };
 
 // ==============================|| DASHBOARD MENU ITEMS ||============================== //
 
@@ -16,7 +16,7 @@ const dashboard = {
             title: 'Главная',
             type: 'item',
             url: '/',
-            icon: icons.IconHome,
+            icon: icons.HospitalIcon,
             breadcrumbs: false
         }
     ]

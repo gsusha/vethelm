@@ -1,8 +1,8 @@
 // assets
-import { IconDashboard, IconHelp, IconUsers } from '@tabler/icons';
+import { DoctorIcon, PawIcon, PeopleIcon, ScheduleIcon, SyringeIcon } from 'assets/images/icons/index';
 
 // constant
-const icons = { IconDashboard, IconUsers, IconHelp };
+const icons = { DoctorIcon, PawIcon, PeopleIcon, ScheduleIcon, SyringeIcon };
 
 // ==============================|| DASHBOARD MENU ITEMS ||============================== //
 
@@ -15,24 +15,40 @@ const clinique = {
             id: 'clients',
             title: 'Клиенты',
             type: 'item',
-            url: '/sample-page',
-            icon: icons.IconUsers,
+            url: '/clients',
+            icon: icons.PeopleIcon,
             breadcrumbs: false
         },
         {
             id: 'patients',
             title: 'Пациенты',
             type: 'item',
-            url: '/sample-page',
-            icon: icons.IconHelp,
+            url: '/patients',
+            icon: icons.PawIcon,
             breadcrumbs: false
         },
         {
             id: 'doctors',
             title: 'Врачи',
             type: 'item',
-            url: '/sample-page',
-            icon: icons.IconDashboard,
+            url: '/doctors',
+            icon: icons.DoctorIcon,
+            breadcrumbs: false
+        },
+        {
+            id: 'appointment',
+            title: 'Приём',
+            type: 'item',
+            url: '/appointment',
+            icon: icons.ScheduleIcon,
+            breadcrumbs: false
+        },
+        {
+            id: 'stuff',
+            title: 'Расходники',
+            type: 'item',
+            url: '/stuff',
+            icon: icons.SyringeIcon,
             breadcrumbs: false
         }
     ]

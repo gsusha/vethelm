@@ -1,11 +1,10 @@
 import dashboard from './dashboard';
-import pages from './pages';
 import clinique from './clinique';
 
 // ==============================|| MENU ITEMS ||============================== //
 
 const menuItems = {
-    items: [dashboard, clinique, pages]
+    items: [dashboard, clinique]
 };
 
 export default menuItems;

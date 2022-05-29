@@ -46,24 +46,26 @@ const FirebaseLogin = ({ ...others }) => {
         event.preventDefault();
     };
 
+    const phoneRegExp = /^((\+[1-9]{1,4}[ -]?)|(\([0-9]{2,3}\)[ -]?)|([0-9]{2,4})[ -]?)*?[0-9]{3,4}[ -]?[0-9]{3,4}$/;
+
     return (
         <>
             <Grid container direction="column" justifyContent="center" spacing={2}>
                 <Grid item xs={12} container alignItems="center" justifyContent="center">
                     <Box sx={{ mb: 2 }}>
-                        <Typography variant="subtitle1">Авторизация с помощью э-мейл</Typography>
+                        <Typography variant="subtitle1">Авторизация по номеру телефона</Typography>
                     </Box>
                 </Grid>
             </Grid>
 
             <Formik
                 initialValues={{
-                    email: 'mail@vethelm.ru',
+                    phone: '+7 (000) 123-45-67',
                     password: '123456',
                     submit: null
                 }}
                 validationSchema={Yup.object().shape({
-                    email: Yup.string().email('Некорректный э-мейл').max(255).required('Э-мейл обязателен'),
+                    phone: Yup.string().matches(phoneRegExp, 'Номер телефона некорректный').max(255).required('Номер телефона обязателен'),
                     password: Yup.string().max(255).required('Пароль обязателен')
                 })}
                 onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
@@ -84,21 +86,22 @@ const FirebaseLogin = ({ ...others }) => {
             >
                 {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
                     <form noValidate onSubmit={handleSubmit} {...others}>
-                        <FormControl fullWidth error={Boolean(touched.email && errors.email)} sx={{ ...theme.typography.customInput }}>
-                            <InputLabel htmlFor="outlined-adornment-email-login">Адрес электронной почты</InputLabel>
+                        <FormControl fullWidth error={Boolean(touched.phone && errors.phone)} sx={{ ...theme.typography.customInput }}>
+                            <InputLabel htmlFor="outlined-adornment-phone">Номер телефона</InputLabel>
                             <OutlinedInput
-                                id="outlined-adornment-email-login"
-                                type="email"
-                                value={values.email}
-                                name="email"
+                                id="outlined-adornment-phone"
+                                type="phone"
+                                value={values.phone}
+                                name="phone"
                                 onBlur={handleBlur}
                                 onChange={handleChange}
-                                label="Email Address / Username"
+                                label="Номер телефона"
                                 inputProps={{}}
                             />
-                            {touched.email && errors.email && (
-                                <FormHelperText error id="standard-weight-helper-text-email-login">
-                                    {errors.email}
+                            {touched.phone && errors.phone && (
+                                <FormHelperText error id="standard-weight-helper-text-phone">
+                                    {errors.phone}
+                                    {/* TODO: Сделать маску и настроить валидацию для этого поля */}
                                 </FormHelperText>
                             )}
                         </FormControl>

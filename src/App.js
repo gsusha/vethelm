@@ -11,8 +11,14 @@ import themes from 'themes';
 
 // project imports
 import NavigationScroll from 'layout/NavigationScroll';
+import config from './config';
+import axios from 'axios';
 
 // ==============================|| APP ||============================== //
+
+axios.defaults.baseURL = config.apiUrl;
+axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
+axios.defaults.headers.common['Content-Type'] = 'application/x-www-form-urlencoded';
 
 const App = () => {
     const customization = useSelector((state) => state.customization);
