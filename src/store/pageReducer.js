@@ -13,6 +13,7 @@ export const initialState = {
             currentViewName: 'Week'
         }
     ],
+    appointment: null,
     doctor: null,
     client: null,
     patient: null
@@ -30,6 +31,14 @@ const pageReducer = (state = initialState, action) => {
             return {
                 doctor: (state.doctor = action.payload)
             };
+        case actionTypes.CREATE_OR_UPDATE_DOCTOR:
+            return {
+                doctor: (state.doctor = action.payload)
+            };
+        case actionTypes.DELETE_DOCTOR:
+            return {
+                doctor: (state.doctor = action.payload)
+            };
         case actionTypes.GET_CLIENTS:
             return {
                 clients: (state.clients = action.payload)
@@ -39,6 +48,10 @@ const pageReducer = (state = initialState, action) => {
                 client: (state.client = action.payload)
             };
         case actionTypes.CREATE_OR_UPDATE_CLIENT:
+            return {
+                client: (state.client = action.payload)
+            };
+        case actionTypes.DELETE_CLIENT:
             return {
                 client: (state.client = action.payload)
             };
@@ -54,11 +67,23 @@ const pageReducer = (state = initialState, action) => {
             return {
                 patient: (state.patient = action.payload)
             };
+        case actionTypes.DELETE_PATIENT:
+            return {
+                patient: (state.patient = action.payload)
+            };
         case actionTypes.GET_APPOINTMENTS:
             return {
                 appointments: (state.appointments = action.payload)
             };
         case actionTypes.GET_APPOINTMENT:
+            return {
+                appointment: (state.appointment = action.payload)
+            };
+        case actionTypes.CREATE_OR_UPDATE_APPOINTMENT:
+            return {
+                appointment: (state.appointment = action.payload)
+            };
+        case actionTypes.DELETE_APPOINTMENT:
             return {
                 appointment: (state.appointment = action.payload)
             };
