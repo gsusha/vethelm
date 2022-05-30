@@ -1,19 +1,38 @@
 import MainCard from '../../../../ui-component/cards/MainCard';
-import { Grid, TextField } from '@mui/material';
+import { Button, Grid, IconButton, Modal, TextField } from '@mui/material';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
-import { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
-import { getDoctorDetail } from '../store/doctorsStore';
+import { createOrUpdateDoctor, getDoctorDetail } from '../store/doctorsStore';
 import HelmLoading from '../../../../components/loading/HelmLoading';
+import AnimateButton from '../../../../ui-component/extended/AnimateButton';
+import { Alert } from '@mui/lab';
+import CloseIcon from '@mui/icons-material/Close';
+import AlertTitle from '@mui/material/AlertTitle';
+import { useNavigate } from 'react-router-dom';
 
 function DoctorDetail() {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const routeParams = useParams();
     const doctor = useSelector((state) => state.pages.doctor);
     const [noDoctor, setNoDoctor] = useState(false);
     const doctorId = useMemo(() => (routeParams?.id !== 'new' ? routeParams?.id : null), [routeParams]);
     const [loading, setLoading] = useState(true);
+    const [submit, setSubmit] = useState(false);
+    const [alert, setAlert] = useState(false);
+    const [success, setSuccess] = useState(false);
+
+    const closeAlert = () => {
+        setAlert(false);
+    };
+
+    const openAlert = (success) => {
+        success && setSuccess(true);
+        setAlert(true);
+        setTimeout(closeAlert, 1500);
+    };
 
     const methods = useForm({
         mode: 'onChange',
@@ -23,10 +42,13 @@ function DoctorDetail() {
     const {
         control,
         reset,
+        trigger,
+        getValues,
+        setValue,
         formState: { errors }
     } = methods;
 
-    useEffect(() => reset(doctor), [doctor]);
+    useEffect(() => reset(doctor), [doctor, reset]);
 
     useEffect(() => {
         setLoading(true);
@@ -38,17 +60,77 @@ function DoctorDetail() {
                 }
             });
         } else {
-            // dispatch(newDynamicLink());
             setLoading(false);
         }
-    }, [doctorId]);
+    }, [dispatch, doctorId]);
+
+    const deleteHandler = useCallback(() => {
+        dispatch(deleteDoctor(doctorId)).then(({ payload }) => {
+            if (!payload) {
+                openAlert();
+            } else {
+                openAlert(success);
+                navigate('/doctors');
+            }
+            setSubmit(false);
+        });
+    }, [dispatch, doctorId]);
+
+    const saveHandler = useCallback(async () => {
+        await trigger().then((check) => {
+            if (!check) {
+                openAlert();
+            }
+            setSubmit(true);
+            dispatch(createOrUpdateDoctor({ data: getValues(), id: doctorId })).then(({ payload }) => {
+                if (!payload) {
+                    openAlert();
+                } else {
+                    openAlert(success);
+                    if (!doctorId) {
+                        navigate(`/doctors/${payload.id}`);
+                    }
+                }
+                setSubmit(false);
+            });
+        });
+    }, [dispatch, doctorId, trigger]);
 
     if (noDoctor) {
-        return <MainCard>Нет такого доктора</MainCard>;
+        return <MainCard>Врач не найден</MainCard>;
     }
 
+    const getTitle = () => {
+        return (
+            <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between', alignItems: 'center' }}>
+                <p style={{ margin: 0 }}>Детальная страница врача</p>
+                <div style={{ display: 'flex', gap: '10px' }}>
+                    <AnimateButton>
+                        <Button disableElevation size="medium" type="submit" variant="contained" color="secondary" onClick={saveHandler}>
+                            {doctorId ? 'Обновить' : 'Сохранить'}
+                        </Button>
+                    </AnimateButton>
+                    {doctorId && (
+                        <AnimateButton>
+                            <Button
+                                disableElevation
+                                size="medium"
+                                type="submit"
+                                variant="contained"
+                                color="warning"
+                                onClick={deleteHandler}
+                            >
+                                Удалить
+                            </Button>
+                        </AnimateButton>
+                    )}
+                </div>
+            </div>
+        );
+    };
+
     return (
-        <MainCard title="Детальная страница врача">
+        <MainCard title={getTitle()}>
             {!loading ? (
                 <FormProvider {...methods}>
                     <Grid container rowSpacing={2} columnSpacing={{ xs: 1, sm: 2, md: 3 }} justifyContent="space-between">
@@ -136,6 +218,48 @@ function DoctorDetail() {
             ) : (
                 <HelmLoading />
             )}
+
+            <Modal open={alert} sx={{ width: '50%', margin: 'auto', top: '40%' }}>
+                {success ? (
+                    <Alert
+                        severity="error"
+                        action={
+                            <IconButton
+                                aria-label="close"
+                                color="inherit"
+                                size="small"
+                                onClick={() => {
+                                    setAlert(false);
+                                }}
+                            >
+                                <CloseIcon fontSize="inherit" />
+                            </IconButton>
+                        }
+                    >
+                        <AlertTitle>Ошибка</AlertTitle>
+                        Что-то пошло не так — <strong>попробуйте снова!</strong>
+                    </Alert>
+                ) : (
+                    <Alert
+                        severity="success"
+                        action={
+                            <IconButton
+                                aria-label="close"
+                                color="inherit"
+                                size="small"
+                                onClick={() => {
+                                    setAlert(false);
+                                }}
+                            >
+                                <CloseIcon fontSize="inherit" />
+                            </IconButton>
+                        }
+                    >
+                        <AlertTitle>Успех</AlertTitle>
+                        Ваше действие прошло <strong>успешно!</strong>
+                    </Alert>
+                )}
+            </Modal>
         </MainCard>
     );
 }

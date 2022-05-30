@@ -34,7 +34,7 @@ const PagesRoutes = {
             element: <ClientsList />
         },
         {
-            path: '/clients/detail/:id',
+            path: '/clients/:id',
             element: <ClientDetail />
         },
         {
@@ -42,7 +42,7 @@ const PagesRoutes = {
             element: <DoctorsList />
         },
         {
-            path: '/doctors/detail/:id',
+            path: '/doctors/:id',
             element: <DoctorDetail />
         },
         {
@@ -50,7 +50,7 @@ const PagesRoutes = {
             element: <PatientsList />
         },
         {
-            path: '/patients/detail/:id',
+            path: '/patients/:id',
             element: <PatientDetail />
         },
         {

@@ -3,7 +3,9 @@ import MainCard from 'ui-component/cards/MainCard';
 import { getDoctors } from '../store/doctorsStore';
 import { useDispatch, useSelector } from 'react-redux';
 import { DataGrid } from '@mui/x-data-grid';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import AnimateButton from '../../../../ui-component/extended/AnimateButton';
+import { Button } from '@mui/material';
 
 const doctorColumns = [
     {
@@ -45,11 +47,32 @@ function DoctorsTable() {
     }, [dispatch]);
 
     const handleClick = (id) => {
-        navigate(`/doctors/detail/${id}`);
+        navigate(`/doctors/${id}`);
+    };
+
+    const getTitle = () => {
+        return (
+            <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between', alignItems: 'center' }}>
+                <p style={{ margin: 0 }}>Врачи</p>
+                <AnimateButton>
+                    <Button
+                        disableElevation
+                        size="medium"
+                        type="submit"
+                        variant="contained"
+                        color="secondary"
+                        component={Link}
+                        to="/doctors/new"
+                    >
+                        Добавить
+                    </Button>
+                </AnimateButton>
+            </div>
+        );
     };
 
     return (
-        <MainCard title="Врачи">
+        <MainCard title={getTitle()}>
             <div style={{ height: 400, width: '100%' }}>
                 <DataGrid
                     rows={doctors || []}

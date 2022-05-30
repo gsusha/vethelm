@@ -38,6 +38,10 @@ const pageReducer = (state = initialState, action) => {
             return {
                 client: (state.client = action.payload)
             };
+        case actionTypes.CREATE_OR_UPDATE_CLIENT:
+            return {
+                client: (state.client = action.payload)
+            };
         case actionTypes.GET_PATIENTS:
             return {
                 patients: (state.patients = action.payload)

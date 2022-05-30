@@ -41,7 +41,7 @@ function PatientsTable() {
     }, [dispatch]);
 
     const handleClick = (id) => {
-        navigate(`/patients/detail/${id}`);
+        navigate(`/patients/${id}`);
     };
 
     const getTitle = () => {
@@ -56,7 +56,7 @@ function PatientsTable() {
                         variant="contained"
                         color="secondary"
                         component={Link}
-                        to="/patients/detail/new"
+                        to="/patients/new"
                     >
                         Добавить
                     </Button>

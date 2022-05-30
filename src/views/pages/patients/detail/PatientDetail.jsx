@@ -54,7 +54,7 @@ function PatientDetail() {
         } else {
             setLoading(false);
         }
-    }, [patientId]);
+    }, [dispatch, patientId]);
 
     const saveHandler = useCallback(async () => {
         await trigger().then((check) => {
@@ -68,7 +68,7 @@ function PatientDetail() {
                 } else {
                     alert(patientId ? 'Успешно обновлено' : 'Успешно создано');
                     if (!patientId) {
-                        history.push(`/patient/detail/${payload.id}`);
+                        history.push(`/patients/${payload.id}`);
                     }
                 }
                 setSubmit(false);
@@ -77,7 +77,7 @@ function PatientDetail() {
     }, [patientId, errors]);
 
     if (noPatient) {
-        return <MainCard>Нет такого пациента</MainCard>;
+        return <MainCard>Пациент не найден</MainCard>;
     }
 
     const getTitle = () => {

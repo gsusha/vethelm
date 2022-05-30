@@ -15,5 +15,11 @@ export const GET_PATIENT = 'patients/getDetail/fulfilled';
 export const GET_APPOINTMENT = 'patients/getDetail/fulfilled';
 
 export const CREATE_OR_UPDATE_PATIENT = 'patient/createOrUpdate/fulfilled';
+export const CREATE_OR_UPDATE_CLIENT = 'client/createOrUpdate/fulfilled';
+export const CREATE_OR_UPDATE_DOCTOR = 'doctor/createOrUpdate/fulfilled';
+export const CREATE_OR_UPDATE_APPOINTMENT = 'appointment/createOrUpdate/fulfilled';
 
 export const DELETE_PATIENT = 'patient/delete/fulfilled';
+export const DELETE_CLIENT = 'client/delete/fulfilled';
+export const DELETE_DOCTOR = 'doctor/delete/fulfilled';
+export const DELETE_APPOINTMENT = 'appointment/delete/fulfilled';
