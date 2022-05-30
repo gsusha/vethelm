@@ -7,7 +7,7 @@ function WeekSchedule(currentDate, data) {
     console.log(data);
     return (
         <Paper>
-            <Scheduler data={data} height={660}>
+            <Scheduler data={data} height={660} locale="ru-RU">
                 <ViewState currentDate={currentDate} />
                 <WeekView startDayHour={9} endDayHour={19} />
                 <Appointments />

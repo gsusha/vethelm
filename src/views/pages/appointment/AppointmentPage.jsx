@@ -15,16 +15,18 @@ function AppointmentPage() {
         dispatch(getAppointments()).then(() => setLoading(false));
     }, [dispatch]);
 
-    const data = appointments.map((item) => {
-        return {
-            id: item.id,
-            title: item.id,
-            startDate: new Date(item.start_time),
-            endDate: new Date(item.end_time)
-        };
-    });
+    const data =
+        !loading &&
+        appointments.map((item) => {
+            return {
+                id: item.id,
+                title: item.id,
+                startDate: new Date(item.start_time),
+                endDate: new Date(item.end_time)
+            };
+        });
 
-    return !loading ? <MainCard title="Приём">{WeekSchedule(new Date(), data)}</MainCard> : <HelmLoading />;
+    return <MainCard title="Приём">{!loading ? WeekSchedule(new Date(), data) : <HelmLoading />}</MainCard>;
 }
 
 export default AppointmentPage;
