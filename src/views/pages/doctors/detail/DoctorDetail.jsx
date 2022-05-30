@@ -16,11 +16,14 @@ function DoctorDetail() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const routeParams = useParams();
+
     const doctor = useSelector((state) => state.pages.doctor);
-    const [noDoctor, setNoDoctor] = useState(false);
     const doctorId = useMemo(() => (routeParams?.id !== 'new' ? routeParams?.id : null), [routeParams]);
+
+    const [noDoctor, setNoDoctor] = useState(false);
     const [loading, setLoading] = useState(true);
     const [submit, setSubmit] = useState(false);
+
     const [alert, setAlert] = useState(false);
     const [success, setSuccess] = useState(false);
 
@@ -74,7 +77,7 @@ function DoctorDetail() {
             }
             setSubmit(false);
         });
-    }, [dispatch, doctorId]);
+    }, [dispatch, doctorId, navigate, openAlert, success]);
 
     const saveHandler = useCallback(async () => {
         await trigger().then((check) => {
@@ -94,7 +97,7 @@ function DoctorDetail() {
                 setSubmit(false);
             });
         });
-    }, [dispatch, doctorId, trigger]);
+    }, [dispatch, doctorId, getValues, navigate, openAlert, success, trigger]);
 
     if (noDoctor) {
         return <MainCard>Врач не найден</MainCard>;

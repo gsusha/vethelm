@@ -1,26 +1,45 @@
 import MainCard from '../../../../ui-component/cards/MainCard';
-import { Button, Grid, TextField } from '@mui/material';
+import { Button, Grid, IconButton, Modal, TextField } from '@mui/material';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
-import { createOrUpdatePatient, getPatientDetail } from '../store/patientsStore';
+import { createOrUpdatePatient, deletePatient, getPatientDetail } from '../store/patientsStore';
 import HelmLoading from '../../../../components/loading/HelmLoading';
 import AnimateButton from '../../../../ui-component/extended/AnimateButton';
-import { DatePicker, LocalizationProvider, ToggleButton, ToggleButtonGroup } from '@mui/lab';
+import { Alert, DatePicker, LocalizationProvider, ToggleButton, ToggleButtonGroup } from '@mui/lab';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import ruLocale from 'date-fns/locale/ru';
+import CloseIcon from '@mui/icons-material/Close';
+import AlertTitle from '@mui/material/AlertTitle';
+import { useNavigate } from 'react-router-dom';
 
 function PatientDetail() {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const routeParams = useParams();
+
     const patient = useSelector((state) => state.pages.patient);
-    const [noPatient, setNoPatient] = useState(false);
     const patientId = useMemo(() => (routeParams?.id !== 'new' ? routeParams?.id : null), [routeParams]);
+
+    const [noPatient, setNoPatient] = useState(false);
     const [loading, setLoading] = useState(true);
     const [submit, setSubmit] = useState(false);
     const [date, setDate] = useState('');
     const [alignment, setAlignment] = useState('');
+
+    const [alert, setAlert] = useState(false);
+    const [success, setSuccess] = useState(false);
+
+    const closeAlert = () => {
+        setAlert(false);
+    };
+
+    const openAlert = (success) => {
+        success && setSuccess(true);
+        setAlert(true);
+        setTimeout(closeAlert, 1500);
+    };
 
     const handleAlignment = (event, newAlignment) => {
         setAlignment(newAlignment);
@@ -56,25 +75,37 @@ function PatientDetail() {
         }
     }, [dispatch, patientId]);
 
+    const deleteHandler = useCallback(() => {
+        dispatch(deletePatient(patientId)).then(({ payload }) => {
+            if (!payload) {
+                openAlert();
+            } else {
+                openAlert(success);
+                navigate('/patients');
+            }
+            setSubmit(false);
+        });
+    }, [dispatch, patientId, navigate, openAlert, success]);
+
     const saveHandler = useCallback(async () => {
         await trigger().then((check) => {
             if (!check) {
-                return alert('Ошибка');
+                openAlert();
             }
             setSubmit(true);
             dispatch(createOrUpdatePatient({ data: getValues(), id: patientId })).then(({ payload }) => {
                 if (!payload) {
-                    alert(patientId ? 'Ошибка обновления' : 'Ошибка создания');
+                    openAlert();
                 } else {
-                    alert(patientId ? 'Успешно обновлено' : 'Успешно создано');
+                    openAlert(success);
                     if (!patientId) {
-                        history.push(`/patients/${payload.id}`);
+                        navigate(`/patients/${payload.id}`);
                     }
                 }
                 setSubmit(false);
             });
         });
-    }, [patientId, errors]);
+    }, [dispatch, patientId, getValues, navigate, openAlert, success, trigger]);
 
     if (noPatient) {
         return <MainCard>Пациент не найден</MainCard>;
@@ -92,7 +123,7 @@ function PatientDetail() {
                     </AnimateButton>
                     {patientId && (
                         <AnimateButton>
-                            <Button disableElevation size="medium" type="submit" variant="contained" color="warning">
+                            <Button disableElevation size="medium" type="submit" variant="contained" color="warning" onClick={saveHandler}>
                                 Удалить
                             </Button>
                         </AnimateButton>
@@ -202,6 +233,47 @@ function PatientDetail() {
             ) : (
                 <HelmLoading />
             )}
+            <Modal open={alert} sx={{ width: '50%', margin: 'auto', top: '40%' }}>
+                {success ? (
+                    <Alert
+                        severity="error"
+                        action={
+                            <IconButton
+                                aria-label="close"
+                                color="inherit"
+                                size="small"
+                                onClick={() => {
+                                    setAlert(false);
+                                }}
+                            >
+                                <CloseIcon fontSize="inherit" />
+                            </IconButton>
+                        }
+                    >
+                        <AlertTitle>Ошибка</AlertTitle>
+                        Что-то пошло не так — <strong>попробуйте снова!</strong>
+                    </Alert>
+                ) : (
+                    <Alert
+                        severity="success"
+                        action={
+                            <IconButton
+                                aria-label="close"
+                                color="inherit"
+                                size="small"
+                                onClick={() => {
+                                    setAlert(false);
+                                }}
+                            >
+                                <CloseIcon fontSize="inherit" />
+                            </IconButton>
+                        }
+                    >
+                        <AlertTitle>Успех</AlertTitle>
+                        Ваше действие прошло <strong>успешно!</strong>
+                    </Alert>
+                )}
+            </Modal>
         </MainCard>
     );
 }
