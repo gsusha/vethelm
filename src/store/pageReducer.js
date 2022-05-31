@@ -1,28 +1,27 @@
 // action - state management
 import * as actionTypes from './actions';
+import { defaultAppointment } from './constant';
 
 export const initialState = {
     doctors: [],
     clients: [],
     patients: [],
-    appointments: [
-        {
-            data: [],
-            loading: false,
-            currentDate: new Date(),
-            currentViewName: 'Week'
-        }
-    ],
+    appointments: defaultAppointment,
+    services: [],
+    shifts: [],
     appointment: null,
     doctor: null,
     client: null,
-    patient: null
+    patient: null,
+    service: null,
+    shift: null
 };
 
 // ==============================|| CUSTOMIZATION REDUCER ||============================== //
 
 const pageReducer = (state = initialState, action) => {
     switch (action.type) {
+        // Врачи
         case actionTypes.GET_DOCTORS:
             return {
                 doctors: (state.doctors = action.payload)
@@ -39,6 +38,8 @@ const pageReducer = (state = initialState, action) => {
             return {
                 doctor: (state.doctor = action.payload)
             };
+        //
+        // Клиенты
         case actionTypes.GET_CLIENTS:
             return {
                 clients: (state.clients = action.payload)
@@ -55,6 +56,8 @@ const pageReducer = (state = initialState, action) => {
             return {
                 client: (state.client = action.payload)
             };
+        //
+        // Пациенты
         case actionTypes.GET_PATIENTS:
             return {
                 patients: (state.patients = action.payload)
@@ -71,6 +74,8 @@ const pageReducer = (state = initialState, action) => {
             return {
                 patient: (state.patient = action.payload)
             };
+        //
+        // Приём
         case actionTypes.GET_APPOINTMENTS:
             return {
                 appointments: (state.appointments = action.payload)
@@ -86,6 +91,42 @@ const pageReducer = (state = initialState, action) => {
         case actionTypes.DELETE_APPOINTMENT:
             return {
                 appointment: (state.appointment = action.payload)
+            };
+        //
+        // Услуги
+        case actionTypes.GET_SERVICES:
+            return {
+                services: (state.services = action.payload)
+            };
+        case actionTypes.GET_SERVICE:
+            return {
+                service: (state.service = action.payload)
+            };
+        case actionTypes.CREATE_OR_UPDATE_SERVICE:
+            return {
+                service: (state.service = action.payload)
+            };
+        case actionTypes.DELETE_SERVICE:
+            return {
+                service: (state.service = action.payload)
+            };
+        //
+        // Смены
+        case actionTypes.GET_SHIFTS:
+            return {
+                shifts: (state.shifts = action.payload)
+            };
+        case actionTypes.GET_SHIFT:
+            return {
+                shift: (state.shift = action.payload)
+            };
+        case actionTypes.CREATE_OR_UPDATE_SHIFT:
+            return {
+                shift: (state.shift = action.payload)
+            };
+        case actionTypes.DELETE_SHIFT:
+            return {
+                shift: (state.shift = action.payload)
             };
         default:
             return state;

@@ -1,14 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import MainCard from 'ui-component/cards/MainCard';
+import { getServices } from '../store/servicesStore';
 import { useDispatch, useSelector } from 'react-redux';
 import { DataGrid } from '@mui/x-data-grid';
-import { getClients } from '../store/clientsStore';
 import { Link, useNavigate } from 'react-router-dom';
 import AnimateButton from '../../../../ui-component/extended/AnimateButton';
 import { Button } from '@mui/material';
 import { HelmTitle } from '../../../../components/cardHeader/HelmTitle';
 
-const clientsColumn = [
+const serviceColumns = [
+    {
+        field: 'role',
+        headerName: 'Должность',
+        flex: 1
+    },
     {
         field: 'full_name',
         headerName: 'Имя',
@@ -21,31 +26,37 @@ const clientsColumn = [
         headerName: 'Телефон',
         sortable: false,
         flex: 1
+    },
+    {
+        field: 'birth_data',
+        headerName: 'Дата рождения',
+        sortable: false,
+        flex: 1
     }
 ];
 
-function ClientsTable() {
+function ServicesTable() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const clients = useSelector((state) => state.pages.clients);
+    const services = useSelector((state) => state.pages.services);
 
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         setLoading(true);
-        dispatch(getClients()).then(() => setLoading(false));
+        dispatch(getServices()).then(() => setLoading(false));
     }, [dispatch]);
 
     const handleClick = (id) => {
-        navigate(`/clients/${id}`);
+        navigate(`/services/${id}`);
     };
 
     return (
-        <MainCard title={HelmTitle('Клиенты', 'clients')}>
+        <MainCard title={HelmTitle('Услуги', 'services')}>
             <div style={{ height: 400, width: '100%' }}>
                 <DataGrid
-                    rows={clients || []}
-                    columns={clientsColumn}
+                    rows={services || []}
+                    columns={serviceColumns}
                     pageSize={5}
                     autoPageSize={true}
                     loading={loading}
@@ -58,4 +69,4 @@ function ClientsTable() {
     );
 }
 
-export default ClientsTable;
+export default ServicesTable;

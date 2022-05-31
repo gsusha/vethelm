@@ -6,6 +6,7 @@ import { DataGrid } from '@mui/x-data-grid';
 import { Link, useNavigate } from 'react-router-dom';
 import AnimateButton from '../../../../ui-component/extended/AnimateButton';
 import { Button } from '@mui/material';
+import { HelmTitle } from '../../../../components/cardHeader/HelmTitle';
 
 const doctorColumns = [
     {
@@ -50,29 +51,8 @@ function DoctorsTable() {
         navigate(`/doctors/${id}`);
     };
 
-    const getTitle = () => {
-        return (
-            <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between', alignItems: 'center' }}>
-                <p style={{ margin: 0 }}>Врачи</p>
-                <AnimateButton>
-                    <Button
-                        disableElevation
-                        size="medium"
-                        type="submit"
-                        variant="contained"
-                        color="secondary"
-                        component={Link}
-                        to="/doctors/new"
-                    >
-                        Добавить
-                    </Button>
-                </AnimateButton>
-            </div>
-        );
-    };
-
     return (
-        <MainCard title={getTitle()}>
+        <MainCard title={HelmTitle('Врачи', 'doctors')}>
             <div style={{ height: 400, width: '100%' }}>
                 <DataGrid
                     rows={doctors || []}

@@ -1,63 +1,67 @@
-import { DataGrid } from '@mui/x-data-grid';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import MainCard from 'ui-component/cards/MainCard';
+import { getAllStuff } from '../store/stuffStore';
+import { useDispatch, useSelector } from 'react-redux';
+import { DataGrid } from '@mui/x-data-grid';
+import { useNavigate } from 'react-router-dom';
+import { HelmTitle } from '../../../../components/cardHeader/HelmTitle';
 
-const DoctorsColumn = [
+const stuffColumns = [
     {
-        field: 'firstName',
-        headerName: 'Имя'
+        field: 'role',
+        headerName: 'Должность',
+        flex: 1
     },
     {
-        field: 'lastName',
-        headerName: 'Фамилия'
+        field: 'full_name',
+        headerName: 'Имя',
+        sortable: false,
+        valueGetter: (params) => `${params.row.name || ''} ${params.row.last_name || ''}`,
+        flex: 1
     },
     {
-        field: 'bday',
+        field: 'phone',
+        headerName: 'Телефон',
+        sortable: false,
+        flex: 1
+    },
+    {
+        field: 'birth_data',
         headerName: 'Дата рождения',
-        sortable: false
-    },
-    {
-        field: 'pet',
-        headerName: 'Питомец'
-    }
-];
-
-const DoctorsRows = [
-    {
-        id: '1',
-        firstName: 'Надежда',
-        lastName: 'Соколова',
-        bday: '10.05.1994',
-        pet: 'Сильвия'
-    },
-    {
-        id: '2',
-        firstName: 'Ольга',
-        lastName: 'Белюченко',
-        bday: '10.05.1994',
-        pet: 'Анютыч'
-    },
-    {
-        id: '3',
-        firstName: 'Ксения',
-        lastName: 'Дьяченко',
-        bday: '10.05.1994',
-        pet: 'Юрчик'
-    },
-    {
-        id: '4',
-        firstName: 'Руслан',
-        lastName: 'Узаиров',
-        bday: '10.05.1994',
-        pet: 'Киберпанк'
+        sortable: false,
+        flex: 1
     }
 ];
 
 function StuffTable() {
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const stuff = useSelector((state) => state.pages.stuff);
+
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        setLoading(true);
+        dispatch(getAllStuff()).then(() => setLoading(false));
+    }, [dispatch]);
+
+    const handleClick = (id) => {
+        navigate(`/stuff/${id}`);
+    };
+
     return (
-        <MainCard title="Расходники">
-            <div style={{ width: '100%' }}>
-                <DataGrid rows={DoctorsRows} columns={DoctorsColumn} pageSize={5} rowsPerPageOptions={[5]} />
+        <MainCard title={HelmTitle('Расходники', 'stuff')}>
+            <div style={{ height: 400, width: '100%' }}>
+                <DataGrid
+                    rows={stuff || []}
+                    columns={stuffColumns}
+                    pageSize={5}
+                    autoPageSize={true}
+                    loading={loading}
+                    disableColumnMenu={true}
+                    disableSelectionOnClick={true}
+                    onRowClick={(params) => handleClick(params.id)}
+                />
             </div>
         </MainCard>
     );

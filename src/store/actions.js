@@ -8,18 +8,26 @@ export const GET_DOCTORS = 'doctors/getList/fulfilled';
 export const GET_CLIENTS = 'clients/getList/fulfilled';
 export const GET_PATIENTS = 'patients/getList/fulfilled';
 export const GET_APPOINTMENTS = 'appointments/getList/fulfilled';
+export const GET_SERVICES = 'services/getList/fulfilled';
+export const GET_SHIFTS = 'shifts/getList/fulfilled';
 
 export const GET_DOCTOR = 'doctors/getDetail/fulfilled';
 export const GET_CLIENT = 'clients/getDetail/fulfilled';
 export const GET_PATIENT = 'patients/getDetail/fulfilled';
 export const GET_APPOINTMENT = 'patients/getDetail/fulfilled';
+export const GET_SERVICE = 'services/getDetail/fulfilled';
+export const GET_SHIFT = 'shifts/getDetail/fulfilled';
 
 export const CREATE_OR_UPDATE_PATIENT = 'patient/createOrUpdate/fulfilled';
 export const CREATE_OR_UPDATE_CLIENT = 'client/createOrUpdate/fulfilled';
 export const CREATE_OR_UPDATE_DOCTOR = 'doctor/createOrUpdate/fulfilled';
 export const CREATE_OR_UPDATE_APPOINTMENT = 'appointment/createOrUpdate/fulfilled';
+export const CREATE_OR_UPDATE_SERVICE = 'services/createOrUpdate/fulfilled';
+export const CREATE_OR_UPDATE_SHIFT = 'shifts/createOrUpdate/fulfilled';
 
 export const DELETE_PATIENT = 'patient/delete/fulfilled';
 export const DELETE_CLIENT = 'client/delete/fulfilled';
 export const DELETE_DOCTOR = 'doctor/delete/fulfilled';
 export const DELETE_APPOINTMENT = 'appointment/delete/fulfilled';
+export const DELETE_SERVICE = 'services/delete/fulfilled';
+export const DELETE_SHIFT = 'shifts/delete/fulfilled';

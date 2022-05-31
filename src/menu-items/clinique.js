@@ -1,8 +1,8 @@
 // assets
-import { DoctorIcon, PawIcon, PeopleIcon, ScheduleIcon, SyringeIcon } from 'assets/images/icons/index';
+import { DoctorIcon, PawIcon, PeopleIcon, ScheduleIcon, SyringeIcon, ServicesIcon, ShiftsIcon } from 'assets/images/icons/index';
 
 // constant
-const icons = { DoctorIcon, PawIcon, PeopleIcon, ScheduleIcon, SyringeIcon };
+const icons = { DoctorIcon, PawIcon, PeopleIcon, ScheduleIcon, SyringeIcon, ServicesIcon, ShiftsIcon };
 
 // ==============================|| DASHBOARD MENU ITEMS ||============================== //
 
@@ -41,6 +41,22 @@ const clinique = {
             type: 'item',
             url: '/appointment',
             icon: icons.ScheduleIcon,
+            breadcrumbs: false
+        },
+        {
+            id: 'shifts',
+            title: 'Рабочий график',
+            type: 'item',
+            url: '/shifts',
+            icon: icons.ShiftsIcon,
+            breadcrumbs: false
+        },
+        {
+            id: 'services',
+            title: 'Услуги',
+            type: 'item',
+            url: '/services',
+            icon: icons.ServicesIcon,
             breadcrumbs: false
         },
         {

@@ -7,6 +7,7 @@ import { getPatients } from '../store/patientsStore';
 import { Button } from '@mui/material';
 import AnimateButton from '../../../../ui-component/extended/AnimateButton';
 import { Link } from 'react-router-dom';
+import { HelmTitle } from '../../../../components/cardHeader/HelmTitle';
 const patientColumns = [
     {
         field: 'name',
@@ -66,7 +67,7 @@ function PatientsTable() {
     };
 
     return (
-        <MainCard title={getTitle()}>
+        <MainCard title={HelmTitle('Пациенты', 'patients')}>
             <div style={{ height: 400, width: '100%' }}>
                 <DataGrid
                     rows={patients || []}
