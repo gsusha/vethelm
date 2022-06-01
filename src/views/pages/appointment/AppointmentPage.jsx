@@ -21,8 +21,8 @@ function AppointmentPage() {
             return {
                 id: item.id,
                 title: item.description,
-                startDate: new Date(item.start_time),
-                endDate: new Date(item.end_time)
+                startDate: new Date(item.create_data),
+                endDate: new Date(item.end_data)
             };
         });
 

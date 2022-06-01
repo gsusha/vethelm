@@ -8,7 +8,7 @@ function MonthSchedule(currentDate, data) {
         <Paper>
             <Scheduler data={data} height={660} locale="ru-RU">
                 <ViewState currentDate={currentDate} />
-                <MonthView startDayHour={9} endDayHour={19} />
+                <MonthView startDayHour={8} endDayHour={22} />
                 <Appointments />
             </Scheduler>
         </Paper>

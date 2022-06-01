@@ -8,7 +8,7 @@ function DaySchedule(currentDate, data) {
         <Paper>
             <Scheduler data={data} locale="ru-RU" loading={true}>
                 <ViewState currentDate={currentDate} />
-                <DayView startDayHour={9} endDayHour={14} />
+                <DayView startDayHour={8} endDayHour={22} />
                 <Appointments />
             </Scheduler>
         </Paper>

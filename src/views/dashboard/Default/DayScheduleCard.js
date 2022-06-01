@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { getAppointments } from '../../pages/appointment/appointmentStore';
 import HelmLoading from '../../../components/loading/HelmLoading';
+import { Typography } from '@mui/material';
 
 const DayScheduleCard = ({ isLoading }) => {
     const dispatch = useDispatch();
@@ -25,8 +26,8 @@ const DayScheduleCard = ({ isLoading }) => {
             return {
                 id: item.id,
                 title: item.description,
-                startDate: new Date(item.start_time),
-                endDate: new Date(item.end_time)
+                startDate: new Date(item.create_data),
+                endDate: new Date(item.end_data)
             };
         });
 
@@ -35,7 +36,12 @@ const DayScheduleCard = ({ isLoading }) => {
             {isLoading ? (
                 <SkeletonTotalGrowthBarChart />
             ) : (
-                <MainCard>{!loading ? DaySchedule(new Date(), data) : <HelmLoading />}</MainCard>
+                <MainCard>
+                    <Typography variant="h4" sx={{ marginBottom: '20px' }}>
+                        Приём на сегодня:
+                    </Typography>
+                    {!loading ? DaySchedule(new Date(), data) : <HelmLoading />}
+                </MainCard>
             )}
         </>
     );

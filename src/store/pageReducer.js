@@ -1,14 +1,14 @@
 // action - state management
 import * as actionTypes from './actions';
-import { defaultAppointment } from './constant';
+import { defaultAppointments, defaultShifts } from './constant';
 
 export const initialState = {
     doctors: [],
     clients: [],
     patients: [],
-    appointments: defaultAppointment,
+    appointments: defaultAppointments,
     services: [],
-    shifts: [],
+    shifts: defaultShifts,
     stuff: [],
     appointment: null,
     doctor: null,

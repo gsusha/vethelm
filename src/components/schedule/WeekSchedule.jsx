@@ -8,7 +8,7 @@ function WeekSchedule(currentDate, data) {
         <Paper>
             <Scheduler data={data} height={660} locale="ru-RU">
                 <ViewState currentDate={currentDate} />
-                <WeekView startDayHour={9} endDayHour={19} />
+                <WeekView startDayHour={8} endDayHour={22} />
                 <Appointments />
             </Scheduler>
         </Paper>
