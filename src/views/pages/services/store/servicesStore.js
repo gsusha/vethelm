@@ -1,22 +1,25 @@
 import axios from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import config from '../../../../config';
+
+const path = 'work';
 
 export const getServices = createAsyncThunk('services/getList', async () => {
-    return (await axios.get('http://192.168.1.103/api/work')).data.data;
+    return (await axios.get(`${config.apiUrl}/${path}`)).data.data;
 });
 
 export const getServiceDetail = createAsyncThunk('services/getDetail', async (id) => {
-    return (await axios.get(`http://192.168.1.103/api/work/view?id=${id}`)).data.data;
+    return (await axios.get(`${config.apiUrl}/${path}/view?id=${id}`)).data.data;
 });
 
 export const createOrUpdateService = createAsyncThunk('service/createOrUpdate', async ({ data, id }) => {
     if (id) {
-        return (await axios.post(`http://192.168.1.103/api/work/update?id=${id}`, data)).data.data;
+        return (await axios.post(`${config.apiUrl}/${path}/update?id=${id}`, data)).data.data;
     } else {
-        return (await axios.post(`http://192.168.1.103/api/work/create`, data)).data.data;
+        return (await axios.post(`${config.apiUrl}/${path}/create`, data)).data.data;
     }
 });
 
 export const deleteService = createAsyncThunk('service/delete', async (id) => {
-    return (await axios.get(`http://192.168.1.103/api/work/delete?id=${id}`)).data.data;
+    return (await axios.get(`${config.apiUrl}/${path}/delete?id=${id}`)).data.data;
 });
