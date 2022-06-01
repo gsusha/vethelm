@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import MainCard from 'ui-component/cards/MainCard';
 import { getAllStuff } from '../store/stuffStore';
 import { useDispatch, useSelector } from 'react-redux';
-import { DataGrid } from '@mui/x-data-grid';
+import { DataGrid, ruRU } from '@mui/x-data-grid';
 import { useNavigate } from 'react-router-dom';
 import { HelmTitle } from '../../../../components/cardHeader/HelmTitle';
 
@@ -61,6 +61,7 @@ function StuffTable() {
                     disableColumnMenu={true}
                     disableSelectionOnClick={true}
                     onRowClick={(params) => handleClick(params.id)}
+                    localeText={ruRU.components.MuiDataGrid.defaultProps.localeText}
                 />
             </div>
         </MainCard>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import MainCard from 'ui-component/cards/MainCard';
 import { useDispatch, useSelector } from 'react-redux';
-import { DataGrid } from '@mui/x-data-grid';
+import { DataGrid, ruRU } from '@mui/x-data-grid';
 import { Link, useNavigate } from 'react-router-dom';
 import { getPatients } from '../store/patientsStore';
 import { Button } from '@mui/material';
@@ -73,6 +73,7 @@ function PatientsTable() {
                     disableColumnMenu={true}
                     disableSelectionOnClick={true}
                     onRowClick={(params) => handleClick(params.id)}
+                    localeText={ruRU.components.MuiDataGrid.defaultProps.localeText}
                 />
             </div>
         </MainCard>

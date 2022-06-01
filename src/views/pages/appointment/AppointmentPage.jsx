@@ -20,7 +20,7 @@ function AppointmentPage() {
         appointments.map((item) => {
             return {
                 id: item.id,
-                title: item.id,
+                title: item.description,
                 startDate: new Date(item.start_time),
                 endDate: new Date(item.end_time)
             };
