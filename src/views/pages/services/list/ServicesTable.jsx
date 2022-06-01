@@ -24,11 +24,12 @@ const serviceColumns = [
         headerName: 'Цена',
         sortable: false,
         valueGetter: (params) => params.row.price + ' ₽',
-        flex: 1
+        width: 200
     }
 ];
 
 function ServicesTable() {
+    нф;
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const services = useSelector((state) => state.pages.services);

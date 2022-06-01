@@ -2,6 +2,7 @@
     "name": "vethelm",
     "version": "3.0.1",
     "private": true,
+    "homepage": "https://gsusha.github.io/vethelm",
     "dependencies": {
         "@date-io/date-fns": "1.x",
         "@devexpress/dx-react-core": "^3.0.3",
@@ -27,6 +28,7 @@
         "date-fns": "^2.28.0",
         "formik": "^2.2.6",
         "framer-motion": "^4.1.13",
+        "gh-pages": "^4.0.0",
         "history": "^5.0.0",
         "material-ui-popup-state": "^1.8.0",
         "moment": "^2.29.3",
@@ -51,7 +53,9 @@
         "start": "react-scripts start",
         "build": "react-scripts build",
         "test": "react-scripts test",
-        "eject": "react-scripts eject"
+        "eject": "react-scripts eject",
+        "predeploy": "yarn build",
+        "deploy": "gh-pages -d build"
     },
     "eslintConfig": {
         "extends": [
