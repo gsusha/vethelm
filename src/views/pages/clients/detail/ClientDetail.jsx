@@ -1,5 +1,5 @@
 import MainCard from '../../../../ui-component/cards/MainCard';
-import { Button, Grid, Snackbar, TextField } from '@mui/material';
+import { Button, Grid, Snackbar, TextField, Typography } from '@mui/material';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
@@ -85,7 +85,14 @@ function ClientDetail() {
     }, [dispatch, clientId, getValues, navigate, trigger]);
 
     if (noClient) {
-        return <MainCard>Клиент не найден</MainCard>;
+        return (
+            <MainCard>
+                <Typography sx={{ marginBottom: '20px' }}>Клиент не найден</Typography>
+                <Button sx={{ padding: 0 }} onClick={() => navigate(-1)}>
+                    Вернуться назад
+                </Button>
+            </MainCard>
+        );
     }
 
     const getTitle = () => {

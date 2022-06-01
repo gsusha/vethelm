@@ -1,5 +1,5 @@
 import MainCard from '../../../../ui-component/cards/MainCard';
-import { Button, Grid, Snackbar, TextField } from '@mui/material';
+import { Button, Grid, Snackbar, TextField, Typography } from '@mui/material';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
@@ -93,7 +93,14 @@ function PatientDetail() {
     }, [dispatch, patientId, getValues, navigate, trigger]);
 
     if (noPatient) {
-        return <MainCard>Пациент не найден</MainCard>;
+        return (
+            <MainCard>
+                <Typography sx={{ marginBottom: '20px' }}>Пациент не найден</Typography>
+                <Button sx={{ padding: 0 }} onClick={() => navigate(-1)}>
+                    Вернуться назад
+                </Button>
+            </MainCard>
+        );
     }
 
     const getTitle = () => {

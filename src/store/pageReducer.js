@@ -9,6 +9,7 @@ export const initialState = {
     appointments: defaultAppointment,
     services: [],
     shifts: [],
+    stuff: [],
     appointment: null,
     doctor: null,
     client: null,
@@ -127,6 +128,24 @@ const pageReducer = (state = initialState, action) => {
         case actionTypes.DELETE_SHIFT:
             return {
                 shift: (state.shift = action.payload)
+            };
+        //
+        // Смены
+        case actionTypes.GET_STUFF:
+            return {
+                stuff: (state.stuff = action.payload)
+            };
+        case actionTypes.GET_STUFF_DETAIL:
+            return {
+                stuff: (state.stuff = action.payload)
+            };
+        case actionTypes.CREATE_OR_UPDATE_STUFF:
+            return {
+                stuff: (state.stuff = action.payload)
+            };
+        case actionTypes.DELETE_STUFF:
+            return {
+                stuff: (state.stuff = action.payload)
             };
         default:
             return state;

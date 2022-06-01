@@ -14,22 +14,23 @@ const stuffColumns = [
         flex: 1
     },
     {
-        field: 'type',
-        headerName: 'Тип',
-        sortable: false,
-        flex: 1
-    },
-    {
         field: 'measure',
         headerName: 'Ед. измерения',
         sortable: false,
-        flex: 1
+        width: 150
     },
     {
         field: 'count',
         headerName: 'Количество',
         sortable: false,
-        flex: 1
+        width: 150
+    },
+    {
+        field: 'price',
+        headerName: 'Цена',
+        sortable: false,
+        valueGetter: (params) => params.row.price + ' ₽',
+        width: 150
     }
 ];
 
