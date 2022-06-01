@@ -12,12 +12,13 @@ import Chart from 'react-apexcharts';
 import MainCard from 'ui-component/cards/MainCard';
 import SkeletonTotalOrderCard from 'ui-component/cards/Skeleton/EarningCard';
 
-import ChartDataMonth from './chart-data/total-order-month-line-chart';
-import ChartDataYear from './chart-data/total-order-year-line-chart';
+import ChartDataMonth from './chart-data/month-chart';
+import ChartDataDay from './chart-data/today-chart';
 
 // assets
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import EarningIcon from '../../../assets/images/icons/earning.svg';
+import { useDispatch } from 'react-redux';
 
 const CardWrapper = styled(MainCard)(({ theme }) => ({
     backgroundColor: theme.palette.primary.dark,
@@ -64,9 +65,11 @@ const CardWrapper = styled(MainCard)(({ theme }) => ({
 // ==============================|| DASHBOARD - TOTAL ORDER LINE CHART CARD ||============================== //
 
 const AverageBillCard = ({ isLoading }) => {
+    const dispatch = useDispatch();
     const theme = useTheme();
 
     const [timeValue, setTimeValue] = useState(false);
+
     const handleChangeTime = (event, newValue) => {
         setTimeValue(newValue);
     };
@@ -158,7 +161,7 @@ const AverageBillCard = ({ isLoading }) => {
                                         </Grid>
                                     </Grid>
                                     <Grid item xs={6}>
-                                        {timeValue ? <Chart {...ChartDataMonth} /> : <Chart {...ChartDataYear} />}
+                                        {timeValue ? <Chart {...ChartDataMonth} /> : <Chart {...ChartDataDay} />}
                                     </Grid>
                                 </Grid>
                             </Grid>

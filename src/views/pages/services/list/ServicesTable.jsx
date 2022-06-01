@@ -29,7 +29,6 @@ const serviceColumns = [
 ];
 
 function ServicesTable() {
-    нф;
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const services = useSelector((state) => state.pages.services);

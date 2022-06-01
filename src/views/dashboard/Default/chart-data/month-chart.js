@@ -1,5 +1,3 @@
-// ===========================|| DASHBOARD - TOTAL ORDER MONTH CHART ||=========================== //
-
 const chartData = {
     type: 'line',
     height: 90,
@@ -43,7 +41,7 @@ const chartData = {
     },
     series: [
         {
-            name: 'series1',
+            name: '',
             data: [45, 66, 41, 89, 25, 44, 9, 54]
         }
     ]
