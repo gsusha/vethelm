@@ -1,2 +1,0 @@
-(this.webpackJsonpvethelm=this.webpackJsonpvethelm||[]).push([[19],{622:function(t,e,n){"use strict";n.r(e);var s=n(39),c=(n(0),n(1));e.default=function(){return Object(c.jsx)(s.a,{title:"\u041f\u0440\u043e\u0444\u0438\u043b\u044c",children:"\u0417\u0434\u0435\u0441\u044c \u0431\u0443\u0434\u0435\u0442 \u043f\u0440\u043e\u0444\u0438\u043b\u044c"})}}}]);
-//# sourceMappingURL=19.4e88d7af.chunk.js.map
