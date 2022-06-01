@@ -3,17 +3,20 @@ import MainCard from 'ui-component/cards/MainCard';
 import { useDispatch, useSelector } from 'react-redux';
 import { DataGrid } from '@mui/x-data-grid';
 import { getClients } from '../store/clientsStore';
-import { Link, useNavigate } from 'react-router-dom';
-import AnimateButton from '../../../../ui-component/extended/AnimateButton';
-import { Button } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 import { HelmTitle } from '../../../../components/cardHeader/HelmTitle';
 
 const clientsColumn = [
     {
-        field: 'full_name',
+        field: 'name',
         headerName: 'Имя',
         sortable: false,
-        valueGetter: (params) => `${params.row.name || ''} ${params.row.last_name || ''}`,
+        flex: 1
+    },
+    {
+        field: 'last_name',
+        headerName: 'Фамилия',
+        sortable: true,
         flex: 1
     },
     {

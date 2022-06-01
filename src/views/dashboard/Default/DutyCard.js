@@ -9,6 +9,7 @@ import SkeletonPopularCard from 'ui-component/cards/Skeleton/PopularCard';
 
 // assets
 import ChevronRightOutlinedIcon from '@mui/icons-material/ChevronRightOutlined';
+import { Link } from 'react-router-dom';
 
 // ==============================|| DASHBOARD DEFAULT - POPULAR CARD ||============================== //
 
@@ -68,7 +69,7 @@ const DutyCard = ({ isLoading }) => {
                         </Grid>
                     </CardContent>
                     <CardActions sx={{ p: 1.25, pt: 0, justifyContent: 'center' }}>
-                        <Button size="small" disableElevation>
+                        <Button size="small" disableElevation component={Link} to="/shifts">
                             Посмотреть всех
                             <ChevronRightOutlinedIcon />
                         </Button>

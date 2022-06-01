@@ -5,7 +5,6 @@ import DoctorDetail from './doctors/detail/DoctorDetail';
 import ClientDetail from './clients/detail/ClientDetail';
 import PatientDetail from './patients/detail/PatientDetail';
 import StuffDetail from './stuff/detail/StuffDetail';
-import ServicesTable from './services/list/ServicesTable';
 import ServiceDetail from './services/detail/ServiceDetail';
 
 const ProfilePage = Loadable(lazy(() => import('./profile/ProfilePage')));

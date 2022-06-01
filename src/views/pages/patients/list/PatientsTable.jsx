@@ -2,29 +2,45 @@ import React, { useEffect, useState } from 'react';
 import MainCard from 'ui-component/cards/MainCard';
 import { useDispatch, useSelector } from 'react-redux';
 import { DataGrid } from '@mui/x-data-grid';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { getPatients } from '../store/patientsStore';
 import { Button } from '@mui/material';
 import AnimateButton from '../../../../ui-component/extended/AnimateButton';
-import { Link } from 'react-router-dom';
 import { HelmTitle } from '../../../../components/cardHeader/HelmTitle';
+import { localeDate } from '../../../../utils/functions';
+
 const patientColumns = [
     {
         field: 'name',
         headerName: 'Имя',
-        sortable: false,
+        sortable: true,
         flex: 1
     },
     {
         field: 'type',
         headerName: 'Вид',
-        sortable: false,
+        sortable: true,
         flex: 1
     },
     {
         field: 'birth_data',
         headerName: 'Дата рождения',
         sortable: false,
+        valueGetter: (params) => localeDate(params.row.birth_data),
+        flex: 1
+    },
+    {
+        field: 'steril',
+        headerName: 'Стерилизован',
+        sortable: false,
+        valueGetter: (params) => (params.row.steril ? 'Да' : 'Нет') || '-',
+        flex: 1
+    },
+    {
+        field: 'weight',
+        headerName: 'Вес',
+        sortable: false,
+        valueGetter: (params) => `${params.row.weight + ' кг' || '-'}`,
         flex: 1
     }
 ];
@@ -43,27 +59,6 @@ function PatientsTable() {
 
     const handleClick = (id) => {
         navigate(`/patients/${id}`);
-    };
-
-    const getTitle = () => {
-        return (
-            <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between', alignItems: 'center' }}>
-                <p style={{ margin: 0 }}>Пациенты</p>
-                <AnimateButton>
-                    <Button
-                        disableElevation
-                        size="medium"
-                        type="submit"
-                        variant="contained"
-                        color="secondary"
-                        component={Link}
-                        to="/patients/new"
-                    >
-                        Добавить
-                    </Button>
-                </AnimateButton>
-            </div>
-        );
     };
 
     return (

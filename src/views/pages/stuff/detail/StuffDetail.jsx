@@ -1,5 +1,5 @@
 import MainCard from '../../../../ui-component/cards/MainCard';
-import { Button, Grid, IconButton, Modal, TextField } from '@mui/material';
+import { Button, Grid, Snackbar, TextField } from '@mui/material';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
@@ -7,10 +7,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { createOrUpdateStuff, getStuffDetail } from '../store/stuffStore';
 import HelmLoading from '../../../../components/loading/HelmLoading';
 import AnimateButton from '../../../../ui-component/extended/AnimateButton';
-import { Alert } from '@mui/lab';
-import CloseIcon from '@mui/icons-material/Close';
-import AlertTitle from '@mui/material/AlertTitle';
 import { useNavigate } from 'react-router-dom';
+import { ShowError, ShowSuccess } from '../../../../components/HelmAlert';
 
 function StuffDetail() {
     const dispatch = useDispatch();
@@ -23,19 +21,7 @@ function StuffDetail() {
     const [noStuff, setNoStuff] = useState(false);
     const [loading, setLoading] = useState(true);
     const [submit, setSubmit] = useState(false);
-
-    const [alert, setAlert] = useState(false);
-    const [success, setSuccess] = useState(false);
-
-    const closeAlert = () => {
-        setAlert(false);
-    };
-
-    const openAlert = (success) => {
-        success && setSuccess(true);
-        setAlert(true);
-        setTimeout(closeAlert, 1500);
-    };
+    const [success, setSuccess] = useState('');
 
     const methods = useForm({
         mode: 'onChange',
@@ -47,7 +33,6 @@ function StuffDetail() {
         reset,
         trigger,
         getValues,
-        setValue,
         formState: { errors }
     } = methods;
 
@@ -70,26 +55,26 @@ function StuffDetail() {
     const deleteHandler = useCallback(() => {
         dispatch(deleteStuff(stuffId)).then(({ payload }) => {
             if (!payload) {
-                openAlert();
+                setSuccess(false);
             } else {
-                openAlert(success);
+                setSuccess(true);
                 navigate('/stuff');
             }
             setSubmit(false);
         });
-    }, [dispatch, stuffId, navigate, openAlert, success]);
+    }, [dispatch, stuffId, navigate]);
 
     const saveHandler = useCallback(async () => {
         await trigger().then((check) => {
             if (!check) {
-                openAlert();
+                setSuccess(false);
             }
             setSubmit(true);
             dispatch(createOrUpdateStuff({ data: getValues(), id: stuffId })).then(({ payload }) => {
                 if (!payload) {
-                    openAlert();
+                    setSuccess(false);
                 } else {
-                    openAlert(success);
+                    setSuccess(true);
                     if (!stuffId) {
                         navigate(`/stuff/${payload.id}`);
                     }
@@ -97,7 +82,7 @@ function StuffDetail() {
                 setSubmit(false);
             });
         });
-    }, [dispatch, stuffId, getValues, navigate, openAlert, success, trigger]);
+    }, [dispatch, stuffId, getValues, navigate, trigger]);
 
     if (noStuff) {
         return <MainCard>Расходник не найден</MainCard>;
@@ -222,47 +207,9 @@ function StuffDetail() {
                 <HelmLoading />
             )}
 
-            <Modal open={alert} sx={{ width: '50%', margin: 'auto', top: '40%' }}>
-                {success ? (
-                    <Alert
-                        severity="error"
-                        action={
-                            <IconButton
-                                aria-label="close"
-                                color="inherit"
-                                size="small"
-                                onClick={() => {
-                                    setAlert(false);
-                                }}
-                            >
-                                <CloseIcon fontSize="inherit" />
-                            </IconButton>
-                        }
-                    >
-                        <AlertTitle>Ошибка</AlertTitle>
-                        Что-то пошло не так — <strong>попробуйте снова!</strong>
-                    </Alert>
-                ) : (
-                    <Alert
-                        severity="success"
-                        action={
-                            <IconButton
-                                aria-label="close"
-                                color="inherit"
-                                size="small"
-                                onClick={() => {
-                                    setAlert(false);
-                                }}
-                            >
-                                <CloseIcon fontSize="inherit" />
-                            </IconButton>
-                        }
-                    >
-                        <AlertTitle>Успех</AlertTitle>
-                        Ваше действие прошло <strong>успешно!</strong>
-                    </Alert>
-                )}
-            </Modal>
+            <Snackbar open={success !== ''} autoHideDuration={2000} anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
+                {success ? ShowSuccess() : ShowError()}
+            </Snackbar>
         </MainCard>
     );
 }

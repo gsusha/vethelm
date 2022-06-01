@@ -3,34 +3,27 @@ import MainCard from 'ui-component/cards/MainCard';
 import { getServices } from '../store/servicesStore';
 import { useDispatch, useSelector } from 'react-redux';
 import { DataGrid } from '@mui/x-data-grid';
-import { Link, useNavigate } from 'react-router-dom';
-import AnimateButton from '../../../../ui-component/extended/AnimateButton';
-import { Button } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 import { HelmTitle } from '../../../../components/cardHeader/HelmTitle';
 
 const serviceColumns = [
     {
-        field: 'role',
-        headerName: 'Должность',
-        flex: 1
-    },
-    {
-        field: 'full_name',
+        field: 'name',
         headerName: 'Имя',
-        sortable: false,
-        valueGetter: (params) => `${params.row.name || ''} ${params.row.last_name || ''}`,
+        sortable: true,
         flex: 1
     },
     {
-        field: 'phone',
-        headerName: 'Телефон',
-        sortable: false,
+        field: 'type',
+        headerName: 'Тип',
+        sortable: true,
         flex: 1
     },
     {
-        field: 'birth_data',
-        headerName: 'Дата рождения',
+        field: 'price',
+        headerName: 'Цена',
         sortable: false,
+        valueGetter: (params) => params.row.price + ' ₽',
         flex: 1
     }
 ];

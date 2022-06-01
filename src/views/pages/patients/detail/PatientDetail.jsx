@@ -1,5 +1,5 @@
 import MainCard from '../../../../ui-component/cards/MainCard';
-import { Button, Grid, IconButton, Modal, TextField } from '@mui/material';
+import { Button, Grid, Snackbar, TextField } from '@mui/material';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
@@ -7,12 +7,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { createOrUpdatePatient, deletePatient, getPatientDetail } from '../store/patientsStore';
 import HelmLoading from '../../../../components/loading/HelmLoading';
 import AnimateButton from '../../../../ui-component/extended/AnimateButton';
-import { Alert, DatePicker, LocalizationProvider, ToggleButton, ToggleButtonGroup } from '@mui/lab';
+import { DatePicker, LocalizationProvider, ToggleButton, ToggleButtonGroup } from '@mui/lab';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import ruLocale from 'date-fns/locale/ru';
-import CloseIcon from '@mui/icons-material/Close';
-import AlertTitle from '@mui/material/AlertTitle';
 import { useNavigate } from 'react-router-dom';
+import { ShowError, ShowSuccess } from '../../../../components/HelmAlert';
 
 function PatientDetail() {
     const dispatch = useDispatch();
@@ -27,19 +26,7 @@ function PatientDetail() {
     const [submit, setSubmit] = useState(false);
     const [date, setDate] = useState('');
     const [alignment, setAlignment] = useState('');
-
-    const [alert, setAlert] = useState(false);
-    const [success, setSuccess] = useState(false);
-
-    const closeAlert = () => {
-        setAlert(false);
-    };
-
-    const openAlert = (success) => {
-        success && setSuccess(true);
-        setAlert(true);
-        setTimeout(closeAlert, 1500);
-    };
+    const [success, setSuccess] = useState('');
 
     const handleAlignment = (event, newAlignment) => {
         setAlignment(newAlignment);
@@ -54,12 +41,11 @@ function PatientDetail() {
         control,
         reset,
         getValues,
-        setValue,
         trigger,
         formState: { errors }
     } = methods;
 
-    useEffect(() => reset(patient), [patient]);
+    useEffect(() => reset(patient), [patient, reset]);
 
     useEffect(() => {
         setLoading(true);
@@ -78,26 +64,25 @@ function PatientDetail() {
     const deleteHandler = useCallback(() => {
         dispatch(deletePatient(patientId)).then(({ payload }) => {
             if (!payload) {
-                openAlert();
+                setSuccess(false);
             } else {
-                openAlert(success);
-                navigate('/patients');
+                setSuccess(true);
             }
             setSubmit(false);
         });
-    }, [dispatch, patientId, navigate, openAlert, success]);
+    }, [dispatch, patientId]);
 
     const saveHandler = useCallback(async () => {
         await trigger().then((check) => {
             if (!check) {
-                openAlert();
+                setSuccess(false);
             }
             setSubmit(true);
             dispatch(createOrUpdatePatient({ data: getValues(), id: patientId })).then(({ payload }) => {
                 if (!payload) {
-                    openAlert();
+                    setSuccess(false);
                 } else {
-                    openAlert(success);
+                    setSuccess(true);
                     if (!patientId) {
                         navigate(`/patients/${payload.id}`);
                     }
@@ -105,7 +90,7 @@ function PatientDetail() {
                 setSubmit(false);
             });
         });
-    }, [dispatch, patientId, getValues, navigate, openAlert, success, trigger]);
+    }, [dispatch, patientId, getValues, navigate, trigger]);
 
     if (noPatient) {
         return <MainCard>Пациент не найден</MainCard>;
@@ -123,7 +108,14 @@ function PatientDetail() {
                     </AnimateButton>
                     {patientId && (
                         <AnimateButton>
-                            <Button disableElevation size="medium" type="submit" variant="contained" color="warning" onClick={saveHandler}>
+                            <Button
+                                disableElevation
+                                size="medium"
+                                type="submit"
+                                variant="contained"
+                                color="warning"
+                                onClick={deleteHandler}
+                            >
                                 Удалить
                             </Button>
                         </AnimateButton>
@@ -138,25 +130,25 @@ function PatientDetail() {
             {!loading ? (
                 <FormProvider {...methods}>
                     <Grid container rowSpacing={2} columnSpacing={{ xs: 1, sm: 2, md: 3 }} justifyContent="space-between">
-                        {/*<Grid item xs={12}>*/}
-                        {/*    <Controller*/}
-                        {/*        name="name"*/}
-                        {/*        control={control}*/}
-                        {/*        render={({ field }) => (*/}
-                        {/*            <TextField*/}
-                        {/*                {...field}*/}
-                        {/*                label="Имя"*/}
-                        {/*                id="name"*/}
-                        {/*                type="text"*/}
-                        {/*                fullWidth*/}
-                        {/*                required*/}
-                        {/*                error={!!errors?.name}*/}
-                        {/*                helperText={errors?.name?.message}*/}
-                        {/*                InputLabelProps={{ shrink: true }}*/}
-                        {/*            />*/}
-                        {/*        )}*/}
-                        {/*    />*/}
-                        {/*</Grid>*/}
+                        <Grid item xs={12}>
+                            <Controller
+                                name="name"
+                                control={control}
+                                render={({ field }) => (
+                                    <TextField
+                                        {...field}
+                                        label="Имя"
+                                        id="name"
+                                        type="text"
+                                        fullWidth
+                                        required
+                                        error={!!errors?.name}
+                                        helperText={errors?.name?.message}
+                                        InputLabelProps={{ shrink: true }}
+                                    />
+                                )}
+                            />
+                        </Grid>
 
                         <Grid item xs={12}>
                             <Controller
@@ -233,47 +225,10 @@ function PatientDetail() {
             ) : (
                 <HelmLoading />
             )}
-            <Modal open={alert} sx={{ width: '50%', margin: 'auto', top: '40%' }}>
-                {success ? (
-                    <Alert
-                        severity="error"
-                        action={
-                            <IconButton
-                                aria-label="close"
-                                color="inherit"
-                                size="small"
-                                onClick={() => {
-                                    setAlert(false);
-                                }}
-                            >
-                                <CloseIcon fontSize="inherit" />
-                            </IconButton>
-                        }
-                    >
-                        <AlertTitle>Ошибка</AlertTitle>
-                        Что-то пошло не так — <strong>попробуйте снова!</strong>
-                    </Alert>
-                ) : (
-                    <Alert
-                        severity="success"
-                        action={
-                            <IconButton
-                                aria-label="close"
-                                color="inherit"
-                                size="small"
-                                onClick={() => {
-                                    setAlert(false);
-                                }}
-                            >
-                                <CloseIcon fontSize="inherit" />
-                            </IconButton>
-                        }
-                    >
-                        <AlertTitle>Успех</AlertTitle>
-                        Ваше действие прошло <strong>успешно!</strong>
-                    </Alert>
-                )}
-            </Modal>
+
+            <Snackbar open={success !== ''} autoHideDuration={2000} anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
+                {success ? ShowSuccess() : ShowError()}
+            </Snackbar>
         </MainCard>
     );
 }

@@ -1,5 +1,5 @@
 import MainCard from '../../../../ui-component/cards/MainCard';
-import { Button, Grid, IconButton, Modal, TextField } from '@mui/material';
+import { Button, Grid, Snackbar, TextField } from '@mui/material';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
@@ -7,10 +7,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { createOrUpdateDoctor, getDoctorDetail } from '../store/doctorsStore';
 import HelmLoading from '../../../../components/loading/HelmLoading';
 import AnimateButton from '../../../../ui-component/extended/AnimateButton';
-import { Alert } from '@mui/lab';
-import CloseIcon from '@mui/icons-material/Close';
-import AlertTitle from '@mui/material/AlertTitle';
 import { useNavigate } from 'react-router-dom';
+import { DatePicker, LocalizationProvider } from '@mui/lab';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import ruLocale from 'date-fns/locale/ru';
+import { ShowError, ShowSuccess } from '../../../../components/HelmAlert';
 
 function DoctorDetail() {
     const dispatch = useDispatch();
@@ -23,19 +24,8 @@ function DoctorDetail() {
     const [noDoctor, setNoDoctor] = useState(false);
     const [loading, setLoading] = useState(true);
     const [submit, setSubmit] = useState(false);
-
-    const [alert, setAlert] = useState(false);
-    const [success, setSuccess] = useState(false);
-
-    const closeAlert = () => {
-        setAlert(false);
-    };
-
-    const openAlert = (success) => {
-        success && setSuccess(true);
-        setAlert(true);
-        setTimeout(closeAlert, 1500);
-    };
+    const [date, setDate] = useState('');
+    const [success, setSuccess] = useState('');
 
     const methods = useForm({
         mode: 'onChange',
@@ -47,7 +37,6 @@ function DoctorDetail() {
         reset,
         trigger,
         getValues,
-        setValue,
         formState: { errors }
     } = methods;
 
@@ -70,26 +59,26 @@ function DoctorDetail() {
     const deleteHandler = useCallback(() => {
         dispatch(deleteDoctor(doctorId)).then(({ payload }) => {
             if (!payload) {
-                openAlert();
+                setSuccess(false);
             } else {
-                openAlert(success);
+                setSuccess(true);
                 navigate('/doctors');
             }
             setSubmit(false);
         });
-    }, [dispatch, doctorId, navigate, openAlert, success]);
+    }, [dispatch, doctorId, navigate]);
 
     const saveHandler = useCallback(async () => {
         await trigger().then((check) => {
             if (!check) {
-                openAlert();
+                setSuccess(false);
             }
             setSubmit(true);
             dispatch(createOrUpdateDoctor({ data: getValues(), id: doctorId })).then(({ payload }) => {
-                if (!payload) {
-                    openAlert();
+                if (payload === 'undefined') {
+                    setSuccess(false);
                 } else {
-                    openAlert(success);
+                    setSuccess(true);
                     if (!doctorId) {
                         navigate(`/doctors/${payload.id}`);
                     }
@@ -97,7 +86,7 @@ function DoctorDetail() {
                 setSubmit(false);
             });
         });
-    }, [dispatch, doctorId, getValues, navigate, openAlert, success, trigger]);
+    }, [dispatch, doctorId, getValues, navigate, trigger]);
 
     if (noDoctor) {
         return <MainCard>Врач не найден</MainCard>;
@@ -216,53 +205,50 @@ function DoctorDetail() {
                                 )}
                             />
                         </Grid>
+
+                        <Grid item xs={12}>
+                            <Controller
+                                name="password"
+                                control={control}
+                                render={({ field }) => (
+                                    <TextField
+                                        {...field}
+                                        label="Пароль"
+                                        id="password"
+                                        type="text"
+                                        fullWidth
+                                        required
+                                        error={!!errors?.name}
+                                        helperText={errors?.name?.message}
+                                        InputLabelProps={{ shrink: true }}
+                                    />
+                                )}
+                            />
+                        </Grid>
+
+                        <Grid item xs={12}>
+                            <LocalizationProvider dateAdapter={AdapterDateFns} locale={ruLocale}>
+                                <DatePicker
+                                    id="birth_data"
+                                    label="Дата рождения"
+                                    value={date || getValues().birth_data}
+                                    onChange={(newDate) => {
+                                        setDate(newDate);
+                                    }}
+                                    renderInput={(params) => <TextField {...params} />}
+                                    required
+                                />
+                            </LocalizationProvider>
+                        </Grid>
                     </Grid>
                 </FormProvider>
             ) : (
                 <HelmLoading />
             )}
 
-            <Modal open={alert} sx={{ width: '50%', margin: 'auto', top: '40%' }}>
-                {success ? (
-                    <Alert
-                        severity="error"
-                        action={
-                            <IconButton
-                                aria-label="close"
-                                color="inherit"
-                                size="small"
-                                onClick={() => {
-                                    setAlert(false);
-                                }}
-                            >
-                                <CloseIcon fontSize="inherit" />
-                            </IconButton>
-                        }
-                    >
-                        <AlertTitle>Ошибка</AlertTitle>
-                        Что-то пошло не так — <strong>попробуйте снова!</strong>
-                    </Alert>
-                ) : (
-                    <Alert
-                        severity="success"
-                        action={
-                            <IconButton
-                                aria-label="close"
-                                color="inherit"
-                                size="small"
-                                onClick={() => {
-                                    setAlert(false);
-                                }}
-                            >
-                                <CloseIcon fontSize="inherit" />
-                            </IconButton>
-                        }
-                    >
-                        <AlertTitle>Успех</AlertTitle>
-                        Ваше действие прошло <strong>успешно!</strong>
-                    </Alert>
-                )}
-            </Modal>
+            <Snackbar open={success !== ''} autoHideDuration={2000} anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
+                {success ? ShowSuccess() : ShowError()}
+            </Snackbar>
         </MainCard>
     );
 }

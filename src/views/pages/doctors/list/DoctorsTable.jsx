@@ -3,10 +3,9 @@ import MainCard from 'ui-component/cards/MainCard';
 import { getDoctors } from '../store/doctorsStore';
 import { useDispatch, useSelector } from 'react-redux';
 import { DataGrid } from '@mui/x-data-grid';
-import { Link, useNavigate } from 'react-router-dom';
-import AnimateButton from '../../../../ui-component/extended/AnimateButton';
-import { Button } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 import { HelmTitle } from '../../../../components/cardHeader/HelmTitle';
+import { localeDate } from '../../../../utils/functions';
 
 const doctorColumns = [
     {
@@ -31,6 +30,7 @@ const doctorColumns = [
         field: 'birth_data',
         headerName: 'Дата рождения',
         sortable: false,
+        valueGetter: (params) => localeDate(params.row.birth_data),
         flex: 1
     }
 ];

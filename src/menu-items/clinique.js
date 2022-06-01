@@ -1,5 +1,5 @@
 // assets
-import { DoctorIcon, PawIcon, PeopleIcon, ScheduleIcon, SyringeIcon, ServicesIcon, ShiftsIcon } from 'assets/images/icons/index';
+import { DoctorIcon, PawIcon, PeopleIcon, ScheduleIcon, ServicesIcon, ShiftsIcon, SyringeIcon } from 'assets/images/icons/index';
 
 // constant
 const icons = { DoctorIcon, PawIcon, PeopleIcon, ScheduleIcon, SyringeIcon, ServicesIcon, ShiftsIcon };

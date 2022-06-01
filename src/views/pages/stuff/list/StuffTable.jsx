@@ -8,26 +8,26 @@ import { HelmTitle } from '../../../../components/cardHeader/HelmTitle';
 
 const stuffColumns = [
     {
-        field: 'role',
-        headerName: 'Должность',
-        flex: 1
-    },
-    {
-        field: 'full_name',
-        headerName: 'Имя',
-        sortable: false,
-        valueGetter: (params) => `${params.row.name || ''} ${params.row.last_name || ''}`,
-        flex: 1
-    },
-    {
-        field: 'phone',
-        headerName: 'Телефон',
+        field: 'name',
+        headerName: 'Название',
         sortable: false,
         flex: 1
     },
     {
-        field: 'birth_data',
-        headerName: 'Дата рождения',
+        field: 'type',
+        headerName: 'Тип',
+        sortable: false,
+        flex: 1
+    },
+    {
+        field: 'measure',
+        headerName: 'Ед. измерения',
+        sortable: false,
+        flex: 1
+    },
+    {
+        field: 'count',
+        headerName: 'Количество',
         sortable: false,
         flex: 1
     }
