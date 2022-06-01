@@ -1,5 +1,5 @@
 import MainCard from '../../../ui-component/cards/MainCard';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import WeekSchedule from '../../../components/schedule/WeekSchedule';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAppointments } from './appointmentStore';

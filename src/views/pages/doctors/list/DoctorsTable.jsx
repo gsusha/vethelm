@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import MainCard from 'ui-component/cards/MainCard';
 import { getDoctors } from '../store/doctorsStore';
 import { useDispatch, useSelector } from 'react-redux';

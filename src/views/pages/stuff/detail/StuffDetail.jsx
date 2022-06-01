@@ -1,7 +1,7 @@
 import MainCard from '../../../../ui-component/cards/MainCard';
 import { Button, Grid, Snackbar, TextField, Typography } from '@mui/material';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { createOrUpdateStuff, getStuffDetail } from '../store/stuffStore';
@@ -20,7 +20,6 @@ function StuffDetail() {
 
     const [noStuff, setNoStuff] = useState(false);
     const [loading, setLoading] = useState(true);
-    const [submit, setSubmit] = useState(false);
     const [success, setSuccess] = useState('');
 
     const methods = useForm({
@@ -60,7 +59,6 @@ function StuffDetail() {
                 setSuccess(true);
                 navigate('/stuff');
             }
-            setSubmit(false);
         });
     }, [dispatch, stuffId, navigate]);
 
@@ -69,7 +67,6 @@ function StuffDetail() {
             if (!check) {
                 setSuccess(false);
             }
-            setSubmit(true);
             dispatch(createOrUpdateStuff({ data: getValues(), id: stuffId })).then(({ payload }) => {
                 if (!payload) {
                     setSuccess(false);
@@ -79,7 +76,6 @@ function StuffDetail() {
                         navigate(`/stuff/${payload.id}`);
                     }
                 }
-                setSubmit(false);
             });
         });
     }, [dispatch, stuffId, getValues, navigate, trigger]);

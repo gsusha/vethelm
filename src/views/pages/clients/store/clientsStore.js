@@ -16,10 +16,10 @@ export const createOrUpdateClient = createAsyncThunk('client/createOrUpdate', as
     if (id) {
         return (await axios.post(`${config.apiUrl}/${path}/update?id=${id}`, data)).data.data;
     } else {
-        return (await axios.post(`${config.apiUrl}/api/client/create`, data)).data.data;
+        return (await axios.post(`${config.apiUrl}/${path}/create`, data)).data.data;
     }
 });
 
 export const deleteClient = createAsyncThunk('${path}/delete', async (id) => {
-    return (await axios.get(`${config.apiUrl}/api/client/delete?id=${id}`)).data.data;
+    return (await axios.get(`${config.apiUrl}/${path}/delete?id=${id}`)).data.data;
 });

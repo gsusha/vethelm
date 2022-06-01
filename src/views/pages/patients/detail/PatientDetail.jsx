@@ -1,7 +1,7 @@
 import MainCard from '../../../../ui-component/cards/MainCard';
 import { Button, Grid, Snackbar, TextField, Typography } from '@mui/material';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { createOrUpdatePatient, deletePatient, getPatientDetail } from '../store/patientsStore';
@@ -23,7 +23,6 @@ function PatientDetail() {
 
     const [noPatient, setNoPatient] = useState(false);
     const [loading, setLoading] = useState(true);
-    const [submit, setSubmit] = useState(false);
     const [date, setDate] = useState('');
     const [alignment, setAlignment] = useState('');
     const [success, setSuccess] = useState('');
@@ -68,7 +67,6 @@ function PatientDetail() {
             } else {
                 setSuccess(true);
             }
-            setSubmit(false);
         });
     }, [dispatch, patientId]);
 
@@ -77,7 +75,6 @@ function PatientDetail() {
             if (!check) {
                 setSuccess(false);
             }
-            setSubmit(true);
             dispatch(createOrUpdatePatient({ data: getValues(), id: patientId })).then(({ payload }) => {
                 if (!payload) {
                     setSuccess(false);
@@ -87,7 +84,6 @@ function PatientDetail() {
                         navigate(`/patients/${payload.id}`);
                     }
                 }
-                setSubmit(false);
             });
         });
     }, [dispatch, patientId, getValues, navigate, trigger]);

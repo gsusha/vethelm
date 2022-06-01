@@ -1,7 +1,7 @@
 import MainCard from '../../../../ui-component/cards/MainCard';
 import { Button, Grid, Snackbar, TextField, Typography } from '@mui/material';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { createOrUpdateDoctor, getDoctorDetail } from '../store/doctorsStore';
@@ -23,7 +23,6 @@ function DoctorDetail() {
 
     const [noDoctor, setNoDoctor] = useState(false);
     const [loading, setLoading] = useState(true);
-    const [submit, setSubmit] = useState(false);
     const [date, setDate] = useState('');
     const [success, setSuccess] = useState('');
 
@@ -64,7 +63,6 @@ function DoctorDetail() {
                 setSuccess(true);
                 navigate('/doctors');
             }
-            setSubmit(false);
         });
     }, [dispatch, doctorId, navigate]);
 
@@ -73,7 +71,6 @@ function DoctorDetail() {
             if (!check) {
                 setSuccess(false);
             }
-            setSubmit(true);
             dispatch(createOrUpdateDoctor({ data: getValues(), id: doctorId })).then(({ payload }) => {
                 if (payload === 'undefined') {
                     setSuccess(false);
@@ -83,7 +80,6 @@ function DoctorDetail() {
                         navigate(`/doctors/${payload.id}`);
                     }
                 }
-                setSubmit(false);
             });
         });
     }, [dispatch, doctorId, getValues, navigate, trigger]);

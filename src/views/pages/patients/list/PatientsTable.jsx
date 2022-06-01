@@ -1,11 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import MainCard from 'ui-component/cards/MainCard';
 import { useDispatch, useSelector } from 'react-redux';
 import { DataGrid, ruRU } from '@mui/x-data-grid';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { getPatients } from '../store/patientsStore';
-import { Button } from '@mui/material';
-import AnimateButton from '../../../../ui-component/extended/AnimateButton';
 import { HelmTitle } from '../../../../components/cardHeader/HelmTitle';
 import { localeDate } from '../../../../utils/functions';
 
