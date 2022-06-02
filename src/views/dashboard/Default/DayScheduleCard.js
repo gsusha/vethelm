@@ -4,24 +4,16 @@ import PropTypes from 'prop-types';
 import SkeletonTotalGrowthBarChart from 'ui-component/cards/Skeleton/TotalGrowthBarChart';
 import MainCard from 'ui-component/cards/MainCard';
 import DaySchedule from '../../../components/schedule/DaySchedule';
-import { useDispatch, useSelector } from 'react-redux';
-import { useEffect, useState } from 'react';
-import { getAppointments } from '../../pages/appointment/appointmentStore';
+import { useSelector } from 'react-redux';
 import HelmLoading from '../../../components/loading/HelmLoading';
 import { Typography } from '@mui/material';
 
 const DayScheduleCard = ({ isLoading }) => {
-    const dispatch = useDispatch();
     const appointments = useSelector((state) => state.pages.appointments);
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        setLoading(true);
-        dispatch(getAppointments()).then(() => setLoading(false));
-    }, [dispatch]);
 
     const data =
-        !loading &&
+        !isLoading &&
+        appointments &&
         appointments.map((item) => {
             return {
                 id: item.id,
@@ -40,7 +32,7 @@ const DayScheduleCard = ({ isLoading }) => {
                     <Typography variant="h4" sx={{ marginBottom: '20px' }}>
                         Приём на сегодня:
                     </Typography>
-                    {!loading ? DaySchedule(new Date(), data) : <HelmLoading />}
+                    {!isLoading ? DaySchedule(new Date(), data) : <HelmLoading />}
                 </MainCard>
             )}
         </>

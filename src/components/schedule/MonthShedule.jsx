@@ -5,9 +5,9 @@ import { ViewState } from '@devexpress/dx-react-scheduler';
 function MonthSchedule(currentDate, data) {
     return (
         <Paper>
-            <Scheduler data={data} height={660} locale="ru-RU">
+            <Scheduler data={data} height={660} locale="ru-RU" today={true}>
                 <ViewState currentDate={currentDate} />
-                <MonthView startDayHour={8} endDayHour={22} />
+                <MonthView />
                 <Appointments />
             </Scheduler>
         </Paper>

@@ -1,17 +1,12 @@
 import PropTypes from 'prop-types';
-
-// material-ui
 import { Button, CardActions, CardContent, Divider, Grid, Typography } from '@mui/material';
-
-// project imports
 import MainCard from 'ui-component/cards/MainCard';
 import SkeletonPopularCard from 'ui-component/cards/Skeleton/PopularCard';
-
-// assets
 import ChevronRightOutlinedIcon from '@mui/icons-material/ChevronRightOutlined';
 import { Link } from 'react-router-dom';
-
-// ==============================|| DASHBOARD DEFAULT - POPULAR CARD ||============================== //
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect, useState } from 'react';
+import { getShiftDetail, getShifts } from '../../pages/shifts/store/shiftsStore';
 
 const DutyCard = ({ isLoading }) => {
     return (
