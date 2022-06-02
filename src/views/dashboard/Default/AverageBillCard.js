@@ -12,14 +12,10 @@ import Chart from 'react-apexcharts';
 import MainCard from 'ui-component/cards/MainCard';
 import SkeletonTotalOrderCard from 'ui-component/cards/Skeleton/EarningCard';
 
-import ChartDataMonth from './chart-data/month-chart';
-import ChartDataDay from './chart-data/today-chart';
-
 // assets
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import EarningIcon from '../../../assets/images/icons/earning.svg';
-import { useDispatch, useSelector } from 'react-redux';
-import moment from 'moment';
+import { useSelector } from 'react-redux';
 
 const CardWrapper = styled(MainCard)(({ theme }) => ({
     backgroundColor: theme.palette.primary.dark,
@@ -63,10 +59,7 @@ const CardWrapper = styled(MainCard)(({ theme }) => ({
     }
 }));
 
-// ==============================|| DASHBOARD - TOTAL ORDER LINE CHART CARD ||============================== //
-
 const AverageBillCard = ({ isLoading }) => {
-    const dispatch = useDispatch();
     const appointments = useSelector((state) => state.pages.appointments);
     const theme = useTheme();
 
@@ -76,42 +69,141 @@ const AverageBillCard = ({ isLoading }) => {
         setTimeValue(newValue);
     };
 
-    const sumOfPrices = (period) => {
-        let sum = 0;
-        if (!appointments.isEmpty) {
-            appointments.map((item) => {
-                switch (period) {
-                    case 'day': {
-                        let dataDay = new Date(item.create_data).toLocaleDateString();
-                        let currentDay = new Date().toLocaleDateString();
-                        if (item.price && dataDay === currentDay) {
-                            sum += item.price;
-                        }
-                        break;
-                    }
-                    case 'month': {
-                        let dataMonth = new Date(item.create_data).getMonth();
-                        let currentMonth = new Date().getMonth();
-                        if (item.price && dataMonth === currentMonth) {
-                            sum += item.price;
-                        }
-                        break;
-                    }
-                    case 'yesterday': {
-                        let dataDay = new Date(item.create_data);
-                        let currentDay = new Date();
-                        let prevCurrentDay = new Date();
-                        prevCurrentDay.setDate(currentDay.getDate() - 1);
-                        if (item.price && dataDay.toLocaleDateString() === prevCurrentDay.toLocaleDateString()) {
-                            sum += item.price;
-                        }
-                        break;
-                    }
-                }
-            });
+    let daySum = 0;
+    let yesterdaySum = 0;
+    let monthSum = 0;
 
-            return sum;
-        }
+    let dayPrices = [];
+    let monthPrices = [];
+
+    if (appointments && !appointments.isEmpty) {
+        appointments.map((item) => {
+            //Сумма за текущий день
+            let dataDay = new Date(item.create_data);
+            let currentDay = new Date();
+            if (item.price && dataDay.toLocaleDateString() === currentDay.toLocaleDateString()) {
+                daySum += item.price;
+                dayPrices.push(item.price);
+            }
+
+            //Сумма за текущий месяц
+            let dataMonth = new Date(item.create_data).getMonth();
+            let currentMonth = new Date().getMonth();
+            if (item.price && dataMonth === currentMonth) {
+                monthSum += item.price;
+                monthPrices.push(item.price);
+            }
+
+            //Сумма за вчерашний день
+            let prevCurrentDay = new Date();
+            prevCurrentDay.setDate(currentDay.getDate() - 1);
+            if (item.price && dataDay.toLocaleDateString() === prevCurrentDay.toLocaleDateString()) {
+                yesterdaySum += item.price;
+            }
+        });
+    }
+
+    const monthData = {
+        type: 'line',
+        height: 90,
+        options: {
+            chart: {
+                sparkline: {
+                    enabled: true
+                }
+            },
+            dataLabels: {
+                enabled: false
+            },
+            colors: ['#fff'],
+            fill: {
+                type: 'solid',
+                opacity: 1
+            },
+            stroke: {
+                curve: 'smooth',
+                width: 3
+            },
+            yaxis: {
+                show: false,
+                min: 0,
+                max: Math.max.apply(null, monthPrices) + 10
+            },
+            legend: {
+                show: false
+            },
+            tooltip: {
+                theme: 'dark',
+                fixed: {
+                    enabled: false
+                },
+                x: {
+                    show: false
+                },
+                y: {
+                    title: 'Total Order'
+                },
+                marker: {
+                    show: false
+                }
+            }
+        },
+        series: [
+            {
+                name: '',
+                data: monthPrices
+            }
+        ]
+    };
+
+    const dayData = {
+        type: 'line',
+        height: 90,
+        options: {
+            chart: {
+                sparkline: {
+                    enabled: true
+                }
+            },
+            dataLabels: {
+                enabled: false
+            },
+            colors: ['#fff'],
+            fill: {
+                type: 'solid',
+                opacity: 1
+            },
+            stroke: {
+                curve: 'smooth',
+                width: 3
+            },
+            yaxis: {
+                show: false,
+                min: 0,
+                max: Math.max.apply(null, dayPrices) + 10
+            },
+            tooltip: {
+                theme: 'dark',
+                fixed: {
+                    enabled: false
+                },
+                x: {
+                    show: false
+                },
+                y: {
+                    show: false
+                },
+                marker: {
+                    show: false
+                }
+            }
+        },
+        series: [
+            {
+                name: '',
+                data: dayPrices
+            }
+        ]
     };
 
     return (
@@ -175,7 +267,7 @@ const AverageBillCard = ({ isLoading }) => {
                                                             mb: 0.75
                                                         }}
                                                     >
-                                                        {sumOfPrices('month') || 'Нет данных'}
+                                                        {monthSum + ' ₽' || 'Нет данных'}
                                                     </Typography>
                                                 ) : (
                                                     <Typography
@@ -187,7 +279,7 @@ const AverageBillCard = ({ isLoading }) => {
                                                             mb: 0.75
                                                         }}
                                                     >
-                                                        {sumOfPrices('day') || 'Нет данных'}
+                                                        {daySum + ' ₽' || 'Нет данных'}
                                                     </Typography>
                                                 )}
                                             </Grid>
@@ -204,9 +296,7 @@ const AverageBillCard = ({ isLoading }) => {
                                                             fontSize="inherit"
                                                             sx={{
                                                                 transform:
-                                                                    sumOfPrices('day') < sumOfPrices('yesterday')
-                                                                        ? 'rotate3d(1, 1, 1, 45deg)'
-                                                                        : 'rotate(220deg)'
+                                                                    daySum < yesterdaySum ? 'rotate3d(1, 1, 1, 45deg)' : 'rotate(220deg)'
                                                             }}
                                                         />
                                                     </Avatar>
@@ -228,7 +318,7 @@ const AverageBillCard = ({ isLoading }) => {
                                         </Grid>
                                     </Grid>
                                     <Grid item xs={6}>
-                                        {timeValue ? <Chart {...ChartDataMonth} /> : <Chart {...ChartDataDay} />}
+                                        {timeValue ? <Chart {...monthData} /> : <Chart {...dayData} />}
                                     </Grid>
                                 </Grid>
                             </Grid>
